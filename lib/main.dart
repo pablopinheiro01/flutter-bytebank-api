@@ -4,6 +4,7 @@ import 'package:bytebank/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 
 import 'database/app_database.dart';
+import 'http/webclient.dart';
 import 'models/contact.dart';
 
 void main() {
@@ -12,6 +13,8 @@ void main() {
   //   save(Contact(0, 'Francinilda', 9000));
   //   // findAll().then((contacts) => debugPrint(contacts.toString()));
   // });
+
+  findAll();
 
 }
 
