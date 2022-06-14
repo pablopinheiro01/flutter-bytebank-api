@@ -1,4 +1,5 @@
 import 'package:bytebank/screens/contacts_list.dart';
+import 'package:bytebank/screens/transactions_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,17 +20,30 @@ class Dashboard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('images/bytebank.png'),
           ),
-          Row(
-            children: [
-              _FeatureItem('Transfer', Icons.monetization_on),
-              _FeatureItem('Transection Feed', Icons.description),
-            ],
+          Container(
+            height: 120,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _FeatureItem(
+                  'Transfer',
+                  Icons.monetization_on,
+                  onClick: () => _showContacts(context, ContactsList()),
+                ),
+                _FeatureItem(
+                  'Transection Feed',
+                  Icons.description,
+                  onClick: () => _showContacts(context, TransactionsList()),
+                ),
+              ],
+            ),
           ),
-
-
         ],
       ),
     );
+  }
+  void _showContacts(BuildContext context, Widget go){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => go));
   }
 }
 
@@ -37,8 +51,9 @@ class _FeatureItem extends StatelessWidget {
 
   final String name;
   final IconData icon;
+  final Function? onClick; //callback do dart
 
-  _FeatureItem(this.name, this.icon);
+  _FeatureItem(this.name, this.icon, { @required this.onClick });
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +63,10 @@ class _FeatureItem extends StatelessWidget {
       child: Material(
         color: Colors.green,
         child: InkWell(// componente do material
-          onTap: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ContactsList()));
+          onTap: () {
+            if(onClick != null ){
+              onClick!();
+            }
           },
           child: Container(
             padding: EdgeInsets.all(8.0),
@@ -71,5 +88,6 @@ class _FeatureItem extends StatelessWidget {
     );
 
   }
+
 }
 
