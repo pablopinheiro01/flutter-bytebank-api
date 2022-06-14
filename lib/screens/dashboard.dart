@@ -19,35 +19,57 @@ class Dashboard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('images/bytebank.png'),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            // child: GestureDetector(
-            child: Material(
-              color: Colors.green,
-              child: InkWell(// componente do material
-                onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ContactsList()));
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8.0),
-                  height: 120,
-                  width: 100,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(Icons.people, color: Colors.white, size: 56,),
-                      Text('Contacts',
-                        style: TextStyle(color:Colors.white, fontSize: 16.0),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
+          Row(
+            children: [
+              _FeatureItem('Transfer', Icons.monetization_on),
+              _FeatureItem('Transection Feed', Icons.description),
+            ],
+          ),
+
+
         ],
       ),
     );
   }
 }
+
+class _FeatureItem extends StatelessWidget {
+
+  final String name;
+  final IconData icon;
+
+  _FeatureItem(this.name, this.icon);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      // child: GestureDetector(
+      child: Material(
+        color: Colors.green,
+        child: InkWell(// componente do material
+          onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ContactsList()));
+          },
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            height: 140,
+            width: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(icon, color: Colors.white, size: 56,),
+                Text(name,
+                  style: TextStyle(color:Colors.white, fontSize: 16.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+  }
+}
+
