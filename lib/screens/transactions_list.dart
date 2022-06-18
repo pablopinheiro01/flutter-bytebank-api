@@ -18,7 +18,8 @@ class TransactionsList extends StatelessWidget {
           title: Text('Transactions'),
         ),
         body: FutureBuilder<List<Transaction>>(
-            future: Future.delayed(Duration(seconds: 1)).then((value) => _webClient.findAll()),
+            // future: Future.delayed(Duration(seconds: 1)).then((value) => _webClient.findAll()),
+            future: _webClient.findAll(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
@@ -28,6 +29,7 @@ class TransactionsList extends StatelessWidget {
                 case ConnectionState.active:
                   break;
                 case ConnectionState.done:
+                  debugPrint("data snapshot ${snapshot.data}");
                   if(snapshot.hasData){
                     final List<Transaction>? transactions = snapshot.data;
                     return ListView.builder(itemBuilder: (context, index) {
