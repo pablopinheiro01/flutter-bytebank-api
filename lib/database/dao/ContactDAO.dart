@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../models/contact.dart';
@@ -36,6 +37,7 @@ class ContactDAO{
     final Database db = await getDatabase(tableSql);
     final List<Map<String,dynamic>> result = await db.query(_tableName);
     List<Contact> contacts = _toList(result);
+    debugPrint('dados encontrados $contacts');
     return contacts;
   }
 

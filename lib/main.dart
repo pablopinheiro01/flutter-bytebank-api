@@ -14,10 +14,9 @@ void main() {
   //   // findAll().then((contacts) => debugPrint(contacts.toString()));
   // });
 
-  findAll();
-
+  findAll()
+      .then((transaction) => print('new Transaction criada: $transaction'));
 }
-
 
 class BytebankApp extends StatelessWidget {
   @override
@@ -35,5 +34,3 @@ class BytebankApp extends StatelessWidget {
     );
   }
 }
-
-
