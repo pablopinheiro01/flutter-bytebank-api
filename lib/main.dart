@@ -1,3 +1,4 @@
+import 'package:bytebank/models/transaction.dart';
 import 'package:bytebank/screens/contact_form.dart';
 import 'package:bytebank/screens/contacts_list.dart';
 import 'package:bytebank/screens/dashboard.dart';
@@ -14,8 +15,10 @@ void main() {
   //   // findAll().then((contacts) => debugPrint(contacts.toString()));
   // });
 
-  findAll()
-      .then((transaction) => print('new Transaction criada: $transaction'));
+  // save(Transaction(300.0, Contact(0, 'jao', 3000 ))).then((value) => print(value));
+  // findAll()
+  //     .then((transaction) => print('new Transaction criada: $transaction'));
+
 }
 
 class BytebankApp extends StatelessWidget {
