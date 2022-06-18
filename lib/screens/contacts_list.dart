@@ -2,6 +2,7 @@ import 'package:bytebank/components/centered_message.dart';
 import 'package:bytebank/components/progress.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contact_form.dart';
+import 'package:bytebank/screens/transaction_form.dart';
 import 'package:flutter/material.dart';
 
 import '../database/dao/ContactDAO.dart';
@@ -42,7 +43,9 @@ class _ContactsListState extends State<ContactsList> {
                 final List<Contact> contacts = snapshot.data as List<Contact>;
                 return ListView.builder(
                   itemBuilder: (context, index) {
-                    return _ContactItem(contacts[index]);
+                    return _ContactItem(contacts[index], onClick: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => TransactionForm(contacts[index])));
+                    },);
                   },
                   itemCount: contacts.length,
                 );
@@ -72,8 +75,9 @@ class _ContactsListState extends State<ContactsList> {
 
 class _ContactItem extends StatelessWidget {
   final Contact contact;
+  final Function onClick;
 
-  _ContactItem(this.contact);
+  _ContactItem(this.contact, { required this.onClick });
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +89,10 @@ class _ContactItem extends StatelessWidget {
         ),
         subtitle: Text(contact.accountNumber.toString()),
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ContactForm(),
-          ));
+          // Navigator.of(context).push(MaterialPageRoute(
+          //   builder: (context) => ContactForm(),
+          // ));
+          onClick();
         },
       ),
     );
