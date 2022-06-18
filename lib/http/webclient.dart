@@ -10,15 +10,18 @@ import 'package:http_interceptor/models/response_data.dart';
 
 import '../models/contact.dart';
 
+Client client = InterceptedClient.build(interceptors: [
+  LoggingInterceptor(),
+]);
+
+const String base_url = 'http://192.168.15.90:8081/transactions';
+
 Future<List<Transaction>> findAll() async {
-  Client client = InterceptedClient.build(interceptors: [
-    LoggingInterceptor(),
-  ]);
 
   final Response response =
       // await client.get(Uri.parse('http://192.168.15.900:8081/transactions')).timeout(Duration(seconds: 7)); //erro direto
       // await client.get(Uri.parse('http://192.168.15.90:8081/transactions')).timeout(Duration(seconds: 7)); // erro timeout
-      await client.get(Uri.parse('http://192.168.15.90:8081/transactions')).timeout(Duration(seconds: 7));
+      await client.get(Uri.parse(base_url)).timeout(Duration(seconds: 7));
 
   final List<dynamic> decodejson = jsonDecode(response.body);
   final List<Transaction> transactions = [];
@@ -33,6 +36,31 @@ Future<List<Transaction>> findAll() async {
   }
 
   return transactions;
+}
+
+
+Future<Transaction> save(Transaction transaction) async{
+
+  final Map<String, dynamic> transactionMap = {
+    'value': transaction.value,
+    'contact': { 'name': transaction.contact.name, 'accountNumber': transaction.contact.accountNumber }
+  };
+
+  final String transactionJson = jsonEncode(transactionMap);
+
+  final Response response = await client.post(Uri.parse(base_url),
+    headers: {'content-type': 'application/json', 'password': '2000'},
+    body:transactionJson
+  );
+
+  Map<String, dynamic> json =  jsonDecode(response.body);
+  final Map<String, dynamic> contactJson = json['contact'];
+
+  return Transaction(
+    json['value'],
+    Contact(0, contactJson['name'], contactJson['accountNumber']),
+  );
+
 }
 
 class LoggingInterceptor implements InterceptorContract {
