@@ -1,3 +1,4 @@
+import 'package:bytebank/components/transaction_auth_dialog.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:bytebank/screens/contact_form.dart';
 import 'package:bytebank/screens/contacts_list.dart';
@@ -33,7 +34,7 @@ class BytebankApp extends StatelessWidget {
           textTheme: ButtonTextTheme.primary,
         ),
       ),
-      home: Dashboard(),
+      home: TransactionAuthDialog(),
     );
   }
 }
