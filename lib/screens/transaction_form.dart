@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bytebank/components/transaction_auth_dialog.dart';
 import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:flutter/material.dart';
@@ -89,14 +91,32 @@ class _TransactionFormState extends State<TransactionForm> {
   void _save(Transaction transactionCreated, String password, BuildContext context) async {
     await Future.delayed(Duration(seconds: 1)); //setado um delay para requisiçao
 
-    final Transaction transaction = await _webClient.save(transactionCreated, password)
-        .catchError((error){
-        showDialog(context: context, builder: (contextDialog){
-        return FailureDialog(error.message);
-      });
-     }, test: (error) => error is Exception //garantimos a impl default tem um message
-    );
+    Transaction transaction = await _send(transactionCreated, password, context);
 
+    await _showSuccessFulMessage(transaction, context);
+  }
+
+  Future<Transaction> _send(Transaction transactionCreated, String password, BuildContext context) async {
+    final Transaction transaction = await _webClient.save(transactionCreated, password)
+        .catchError((e){
+        _showFailureMessage(context, "Timeout submitting the transaction");
+      },
+    test: (e) => e is TimeoutException)
+        .catchError((error){
+        _showFailureMessage(context, error.message);
+      },
+      test: (error) => error is HttpException //garantimos a impl default tem um message
+      );
+    return transaction;
+  }
+
+  void _showFailureMessage(BuildContext context, String message) {
+    showDialog(context: context, builder: (contextDialog){
+      return FailureDialog(message);
+    });
+  }
+
+  Future<void> _showSuccessFulMessage(Transaction transaction, BuildContext context) async {
     if (transaction != null) {
       await showDialog(context: context, builder: (contextDialog){
         return SuccessDialog("Successful transaction");

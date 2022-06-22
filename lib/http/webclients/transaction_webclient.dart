@@ -12,7 +12,7 @@ class TransactionWebClient{
     final Response response =
     // await client.get(Uri.parse('http://192.168.15.900:8081/transactions')).timeout(Duration(seconds: 7)); //erro direto
     // await client.get(Uri.parse('http://192.168.15.90:8081/transactions')).timeout(Duration(seconds: 7)); // erro timeout
-    await client.get(Uri.parse(base_url)).timeout(Duration(seconds: 5));
+    await client.get(Uri.parse(base_url));
 
     final List<dynamic> json = jsonDecode(response.body);
 
@@ -27,23 +27,22 @@ class TransactionWebClient{
     );
 
     if(response.statusCode != 200) {
-      _throwHttpError(response.statusCode);
+      throw HttpException(_statusCodeResponse[response.statusCode]!);
     }
 
     return Transaction.fromJson(jsonDecode(response.body));
 
-  }
-
-  void _throwHttpError(int statusCode) {
-
-    throw Exception(_statusCodeResponse[statusCode]);
-
-  }
+    }
 
   static final Map<int, String> _statusCodeResponse = {
     400:"There was an error submitting transaction",
     401: "Authentication Failed"
   };
 
+}
 
+class HttpException implements Exception{
+  final String message;
+
+  HttpException(this.message);
 }
