@@ -68,16 +68,10 @@ class _TransactionFormState extends State<TransactionForm> {
                           Transaction(value!, widget.contact);
                       showDialog(
                           context: context,
-                          builder: (context) {
+                          builder: (contextDialog) { //enviando o contexto do builder diferente do context geral
                             return TransactionAuthDialog(
                                 onConfirm: (String password) {
-                              _webClient.save(transactionCreated, password).then(
-                                (transaction) {
-                                  if (transaction != null) {
-                                    Navigator.pop(context);
-                                  }
-                                },
-                              );
+                              _save(transactionCreated, password, context);
                             });
                           });
                     },
@@ -88,6 +82,17 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
         ),
       ),
+    );
+  }
+
+  void _save(Transaction transactionCreated, String password, BuildContext context) async {
+    await Future.delayed(Duration(seconds: 1)); //setado um delay para requisiçao
+     _webClient.save(transactionCreated, password).then(
+      (transaction) {
+        if (transaction != null) {
+          Navigator.pop(context);
+        }
+      },
     );
   }
 }
