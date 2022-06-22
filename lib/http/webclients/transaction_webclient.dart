@@ -19,10 +19,10 @@ class TransactionWebClient{
     return json.map((dynamic item) => Transaction.fromJson(item)).toList();
   }
 
-  Future<Transaction> save(Transaction transaction) async{
+  Future<Transaction> save(Transaction transaction, String password) async{
 
     final Response response = await client.post(Uri.parse(base_url),
-        headers: {'content-type': 'application/json', 'password': '2000'},
+        headers: {'content-type': 'application/json', 'password': password},
         body: jsonEncode(transaction.toJson())
     );
     return Transaction.fromJson(jsonDecode(response.body));
