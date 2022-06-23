@@ -3,6 +3,7 @@ import 'package:bytebank/screens/contact_form.dart';
 import 'package:bytebank/screens/contacts_list.dart';
 import 'package:bytebank/screens/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import 'database/app_database.dart';
 import 'http/webclient.dart';
@@ -10,6 +11,7 @@ import 'models/contact.dart';
 
 void main() {
   runApp(BytebankApp());
+  // debugPrint(Uuid().v1());
   // save(Contact(1, 'teste_named',1000)).then((id){
   //   save(Contact(0, 'Francinilda', 9000));
   //   // findAll().then((contacts) => debugPrint(contacts.toString()));

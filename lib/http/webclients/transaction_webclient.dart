@@ -21,13 +21,15 @@ class TransactionWebClient{
 
   Future<Transaction> save(Transaction transaction, String password) async{
 
+    await Future.delayed(Duration(seconds: 10));
+
     final Response response = await client.post(Uri.parse(base_url),
         headers: {'content-type': 'application/json', 'password': password},
         body: jsonEncode(transaction.toJson())
     );
 
     if(response.statusCode != 200) {
-      throw HttpException(_statusCodeResponse[response.statusCode]!);
+      throw HttpException(_getMessage(response.statusCode)!);
     }
 
     return Transaction.fromJson(jsonDecode(response.body));
@@ -36,8 +38,19 @@ class TransactionWebClient{
 
   static final Map<int, String> _statusCodeResponse = {
     400:"There was an error submitting transaction",
-    401: "Authentication Failed"
+    401: "Authentication Failed",
+    409: "transaction already existss"
   };
+
+  String? _getMessage(int statusCode) {
+    if(_statusCodeResponse.containsKey(statusCode)){
+      debugPrint("erro pego ${_statusCodeResponse[statusCode]} ");
+      return _statusCodeResponse[statusCode];
+    }else{
+      debugPrint("nao pegou o erro ${statusCode}");
+    }
+    return 'Unknow error';
+  }
 
 }
 
