@@ -5,6 +5,7 @@ import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import '../components/progress.dart';
 import '../components/response_dialog.dart';
 import '../models/contact.dart';
 import '../models/transaction.dart';
@@ -23,6 +24,8 @@ class _TransactionFormState extends State<TransactionForm> {
   final TransactionWebClient _webClient = TransactionWebClient();
   final String transactionId = Uuid().v4();
 
+  bool _sending = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +38,13 @@ class _TransactionFormState extends State<TransactionForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Visibility(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Progress(message: "Sending...",),
+                  ),
+                visible: _sending,
+              ),
               Text(
                 widget.contact.name,
                 style: TextStyle(
@@ -93,6 +103,10 @@ class _TransactionFormState extends State<TransactionForm> {
   void _save(Transaction transactionCreated, String password, BuildContext context) async {
     // await Future.delayed(Duration(seconds: 1)); //setado um delay para requisiçao
 
+    setState((){
+      _sending = true;
+    });
+
     Transaction transaction = await _send(transactionCreated, password, context);
 
     await _showSuccessFulMessage(transaction, context);
@@ -108,7 +122,7 @@ class _TransactionFormState extends State<TransactionForm> {
         _showFailureMessage(context, error.message);
       },
       test: (error) => error is HttpException //garantimos a impl default tem um message
-      );
+      ).whenComplete(() => setState(() => _sending = false)); // finalizando a request eu removo o progress
     return transaction;
   }
 

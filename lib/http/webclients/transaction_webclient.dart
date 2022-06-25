@@ -21,6 +21,7 @@ class TransactionWebClient{
 
   Future<Transaction> save(Transaction transaction, String password) async{
 
+    //configuracao de testes de delay enviando duas vezes a mesma requisicao para testes de idempotencia
     await Future.delayed(Duration(seconds: 10));
 
     final Response response = await client.post(Uri.parse(base_url),
